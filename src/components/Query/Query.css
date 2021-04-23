@@ -1,3 +1,8 @@
 #result {
   display: none;
+  padding: 0.5vw;
+  margin: 1vw 0vw 1vw;
+  background-color: #e6ffe6;
+  border-radius: 10px;
+  box-shadow: 2px 2px #e6e6e6;
 }
