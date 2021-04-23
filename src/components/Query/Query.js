@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import './Query.css'
+import ChartsButtons from '../Charts/ChartsButtons'
 import {  Row, Col, Form, Button } from 'react-bootstrap'
 
 export default class Query extends React.Component {
@@ -39,14 +40,19 @@ export default class Query extends React.Component {
     return (
       <Row className="justify-content-md-center">
         <Col>
-          <Form  onSubmit={this.handleSubmit}>
+          <Form className="m-2"  onSubmit={this.handleSubmit}>
               <Form.Group>
                 <Form.Label>Query:</Form.Label>
                 <Form.Control type="text" name="query" onChange={this.handleChange} />
               </Form.Group>
               <Button variant="primary" type="submit">Search</Button>
           </Form>
-          <span id="result">Result is: { this.state.result }</span>
+          <div id="result" className="mt-5 mb-4">
+            <div id="result-box" className="p-3 mb-2 shadow">Result is: { this.state.result }</div>
+            <br />
+            <ChartsButtons />
+          </div>
+
         </Col>
       </Row>
     )
