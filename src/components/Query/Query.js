@@ -10,7 +10,7 @@ export default class Query extends React.Component {
 
     this.state = {
       query: "",
-      result: null
+      result: null,
     };
   }
 
@@ -50,9 +50,8 @@ export default class Query extends React.Component {
           <div id="result" className="mt-5 mb-4">
             <div id="result-box" className="p-3 mb-2 shadow">Result is: { this.state.result }</div>
             <br />
-            <ChartsButtons />
+            <ChartsButtons dataFromParent = { this.state.result } />
           </div>
-
         </Col>
       </Row>
     )
