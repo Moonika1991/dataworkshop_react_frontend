@@ -1,5 +1,6 @@
 import React from 'react';
 import CanvasJSReact from 'C:/Users/monik/PycharmProjects/dataworkshop_flaskAPI/frontend/src/canvasjs.react';
+import moment from 'moment';
 
 
 export default class LineChart extends React.Component {
@@ -12,8 +13,15 @@ export default class LineChart extends React.Component {
       var dps = [];
       const dictList = JSON.parse(data);
       const dict = dictList[0];
+      var xVal;
       for (const [key, value] of Object.entries(dict)){
-          dps.push({x: new Date(key), y: value});
+          if (moment(key).isValid()){
+            xVal = new Date(key);
+          } else {
+            xVal = key;
+          }
+
+          dps.push({x: xVal, y: value});
       }
       return dps;
   }
