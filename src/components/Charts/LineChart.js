@@ -15,8 +15,11 @@ export default class LineChart extends React.Component {
       const dictList = JSON.parse(data);
       const dict = dictList[0];
       const titleKey = Object.keys(dict)[0];
-      const title = dict[titleKey];
-      delete dict[titleKey];
+      let title ="";
+      if(typeof(dict[titleKey]) === 'string'){
+        title = dict[titleKey];
+        delete dict[titleKey];
+      }
       var xVal;
       var flag = 0;
       for (const [key, value] of Object.entries(dict)){
@@ -31,7 +34,7 @@ export default class LineChart extends React.Component {
   }
 
   render() {
-    const data = this.generateDataPoints(this.props.dataToDisplay)
+    const data = this.generateDataPoints(this.props.dataToDisplay);
     const options = {
 			theme: "light2", // "light1", "dark1", "dark2"
 			animationEnabled: true,
@@ -44,10 +47,10 @@ export default class LineChart extends React.Component {
         xValueFormatString: "DD-MM-YY",
 				dataPoints: data[1]
 			}]
-		}
+		};
 
     return (
-      <div>
+      <div className="m-3">
         <CanvasJSReact.CanvasJSChart options = {options} />
       </div>
     )
