@@ -1,52 +1,49 @@
 import React from 'react';
 import CanvasJSReact from 'C:/Users/monik/PycharmProjects/dataworkshop_flaskAPI/frontend/src/canvasjs.react';
-import moment from 'moment';
 
-
-export default class LineChart extends React.Component {
+export default class ColumnChart extends React.Component {
   constructor() {
 		super();
 		this.generateDataPoints = this.generateDataPoints.bind(this);
 	}
 
   generateDataPoints(data) {
-      var dps = [];
-      const dictList = JSON.parse(data);
+    let dps = [];
+    const dictList = JSON.parse(data);
+    let title = "";
+    if (dictList.length === 1) {
       const dict = dictList[0];
       const titleKey = Object.keys(dict)[0];
-      let title = "";
       if(typeof(dict[titleKey]) === 'string'){
         title = dict[titleKey];
         delete dict[titleKey];
       }
-      var xVal;
       var flag = 0;
       for (const [key, value] of Object.entries(dict)){
-          if (moment(key).isValid()){
-              xVal = new Date(key);
-          } else {
-            xVal = key;
-          }
-          dps.push({x: xVal, y: value});
+          dps.push({label: key, y: value});
       }
-      return [title, dps];
+    }
+    return [title, dps];
   }
 
   render() {
     const data = this.generateDataPoints(this.props.dataToDisplay);
+    console.log(data[1]);
     const options = {
-			theme: "light2", // "light1", "dark1", "dark2"
-			animationEnabled: true,
-			zoomEnabled: true,
-      title:{
+      theme: "light1",
+      zoomEnabled: true,
+      title: {
         text: data[0]
       },
-			data: [{
-				type: "line",
-        xValueFormatString: "DD-MM-YY",
+      axisY: {
+        includeZero: true
+      },
+      data: [{
+        type: "column",
 				dataPoints: data[1]
 			}]
-		};
+
+    };
 
     return (
       <div className="m-3">
