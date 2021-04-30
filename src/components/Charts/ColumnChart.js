@@ -18,9 +18,15 @@ export default class ColumnChart extends React.Component {
         title = dict[titleKey];
         delete dict[titleKey];
       }
-      var flag = 0;
       for (const [key, value] of Object.entries(dict)){
           dps.push({label: key, y: value});
+      }
+    } else {
+      for (const [key, value] of Object.entries(dictList)) {
+        const dict = value;
+        const labelKey = Object.keys(dict)[0];
+        const valueKey = Object.keys(dict)[1];
+        dps.push({label: dict[labelKey], y: dict[valueKey]});
       }
     }
     return [title, dps];
@@ -28,21 +34,16 @@ export default class ColumnChart extends React.Component {
 
   render() {
     const data = this.generateDataPoints(this.props.dataToDisplay);
-    console.log(data[1]);
     const options = {
       theme: "light1",
       zoomEnabled: true,
       title: {
         text: data[0]
       },
-      axisY: {
-        includeZero: true
-      },
       data: [{
         type: "column",
 				dataPoints: data[1]
 			}]
-
     };
 
     return (
