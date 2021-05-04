@@ -4,47 +4,67 @@ import CanvasJSReact from 'C:/Users/monik/PycharmProjects/dataworkshop_flaskAPI/
 export default class ColumnChart extends React.Component {
   constructor() {
 		super();
-		this.generateDataPoints = this.generateDataPoints.bind(this);
+    this.generateOptions = this.generateOptions.bind(this);
+    this.generateSingleDataPoints = this.generateSingleDataPoints.bind(this);
 	}
 
-  generateDataPoints(data) {
-    let dps = [];
-    const dictList = JSON.parse(data);
-    let title = "";
+  generateOptions(inData) {
+    var options = {exportEnabled: true, animationEnabled: true, zoomEnabled: true};
+    var data = [];
+    const dictList = JSON.parse(inData);
     if (dictList.length === 1) {
-      const dict = dictList[0];
-      const titleKey = Object.keys(dict)[0];
-      if(typeof(dict[titleKey]) === 'string'){
-        title = dict[titleKey];
-        delete dict[titleKey];
-      }
-      for (const [key, value] of Object.entries(dict)){
-          dps.push({label: key, y: value});
-      }
+      const dataPoints = this.generateSingleDataPoints(dictList[0]);
+      const title = {text: dataPoints[0]};
+      data.push({ type: "column", dataPoints: dataPoints[1]});
+      options['title'] = title;
+      options['data'] = data;
     } else {
-      for (const [key, value] of Object.entries(dictList)) {
-        const dict = value;
-        const labelKey = Object.keys(dict)[0];
-        const valueKey = Object.keys(dict)[1];
-        dps.push({label: dict[labelKey], y: dict[valueKey]});
-      }
+        var dps = [];
+        // just to check dicts length
+        const testDictKey = Object.keys(dictList)[0];
+        const testDict = dictList[testDictKey];
+        if (Object.keys(testDict).length === 2) {
+          for (const[key, value] of Object.entries(dictList)) {
+            const dict = value;
+            const labelKey = Object.keys(dict)[0];
+            const valueKey = Object.keys(dict)[1];
+            dps.push({label: dict[labelKey], y: dict[valueKey]});
+          }
+          data.push({ type: "column", dataPoints: dps});
+        } else {
+            for (const[key, value] of Object.entries(dictList)) {
+              const dict = value;
+              const nameKey = Object.keys(dict)[0];
+              const name = dict[nameKey];
+              delete dict[nameKey];
+              for (const[key,value] of Object.entries(dict)) {
+                dps.push({label: key, y: value});
+              }
+              data.push({type: "column", name: name, showInLegend: true, dataPoints: dps});
+              dps = [];
+            }
+        }
+        options['data'] = data;
+    }
+    return options
+  }
+
+  generateSingleDataPoints(dict) {
+    let dps = [];
+    let title = "";
+    const titleKey = Object.keys(dict)[0];
+    if(typeof(dict[titleKey]) === 'string'){
+      title = dict[titleKey];
+      delete dict[titleKey];
+    }
+    for (const [key, value] of Object.entries(dict)){
+        dps.push({label: key, y: value});
     }
     return [title, dps];
   }
 
   render() {
-    const data = this.generateDataPoints(this.props.dataToDisplay);
-    const options = {
-      theme: "light1",
-      zoomEnabled: true,
-      title: {
-        text: data[0]
-      },
-      data: [{
-        type: "column",
-				dataPoints: data[1]
-			}]
-    };
+    const options = this.generateOptions(this.props.dataToDisplay);
 
     return (
       <div className="m-3">
