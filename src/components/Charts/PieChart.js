@@ -52,8 +52,9 @@ export default class PieChart extends React.Component {
   render() {
     const data = this.generateDataPoints(this.props.dataToDisplay);
     const options = {
-      theme: "light1",
+      animationEnabled: true,
       zoomEnabled: true,
+      exportEnabled: true,
       title: {
         text: data[0]
       },
