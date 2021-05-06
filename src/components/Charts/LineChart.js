@@ -8,16 +8,23 @@ export default class LineChart extends React.Component {
 		super();
     this.generateData = this.generateData.bind(this);
 		this.generateDataPoints = this.generateDataPoints.bind(this);
+    this.generateAxisX = this.generateAxisX.bind(this);
 	}
 
   generateData(inData) {
-    var data = []
+    var data = [];
+    var title = "";
     const dictList = JSON.parse(inData);
     for (const [key, value] of Object.entries(dictList)) {
       const dataPoints = this.generateDataPoints(value);
-      data.push({ type: 'line', name: dataPoints[0], showInLegend: true, dataPoints: dataPoints[1] });
+      if(dictList.length === 1) {
+        title = dataPoints[0];
+        data.push({ type: "line", dataPoints: dataPoints[1] });
+      } else {
+        data.push({ type: 'line', name: dataPoints[0], showInLegend: true, dataPoints: dataPoints[1] });
+      }
     }
-    return data;
+    return [title, data];
   }
 
   generateDataPoints(dict) {
@@ -31,7 +38,7 @@ export default class LineChart extends React.Component {
       var xVal;
       for (const [key, value] of Object.entries(dict)){
           if (moment(key).isValid()){
-              xVal = new Date(key);
+            xVal = new Date(key);
           } else {
             xVal = key;
           }
@@ -40,19 +47,36 @@ export default class LineChart extends React.Component {
       return [title, dps];
   }
 
+  generateAxisX(dps) {
+    let axisX;
+    //dps[0]["dataPoints"] to get length of one dict
+    if (dps[0]["dataPoints"].length < 21) {
+      axisX = {interval: 1};
+    } else if (dps[0]["dataPoints"].length < 101) {
+      axisX = {interval: 5};
+    } else {
+      axisX = {interval: 25};
+    }
+
+    if (moment(dps[0]['x']).isValid()) {
+      axisX['valueFormatString'] ="DD/MM/YY";
+      axisX['intervalType'] = "day";
+    }
+    return axisX;
+  }
+
   render() {
     const data = this.generateData(this.props.dataToDisplay);
-    console.log(data);
+    const axisX = this.generateAxisX(data[1]);
     const options = {
-			theme: "light2", // "light1", "dark1", "dark2"
+      title: {
+        text: data[0]
+      },
 			animationEnabled: true,
 			zoomEnabled: true,
-      axisX: {
-    		valueFormatString: "DD/MM/YY",
-        interval: 1,
-        intervalType: "day",
-    	},
-			data: data
+      exportEnabled: true,
+      axisX: axisX,
+			data: data[1]
 		};
     return (
       <div className="m-3">
