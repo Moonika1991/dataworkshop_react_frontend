@@ -54,6 +54,7 @@ export default class PieChart extends React.Component {
     const options = {
       theme: "light1",
       zoomEnabled: true,
+      exportEnabled: true,
       title: {
         text: data[0]
       },
