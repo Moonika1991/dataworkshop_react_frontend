@@ -15,6 +15,7 @@ export default class ChartsButtons extends React.Component {
       showHidePieChart: false,
     };
     this.hideComponent = this.hideComponent.bind(this);
+    this.disablePieChart = this.disablePieChart.bind(this);
   }
 
   hideComponent(name) {
@@ -32,17 +33,32 @@ export default class ChartsButtons extends React.Component {
       }
   }
 
+  disablePieChart(inData) {
+    if (inData !== null) {
+      const dictList = JSON.parse(inData);
+      const pieButton = document.getElementById('pieButton');
+      if (dictList.length === 1) {
+        pieButton.disabled = false;
+      } else if (Object.entries(dictList[0]).length <= 2) {
+        pieButton.disabled = false;
+      } else {
+        pieButton.disabled = true;
+      }
+    }
+  }
+
   render() {
     const { showHideLineChart } = this.state;
     const { showHideColumnChart } = this.state;
     const { showHidePieChart } = this.state;
+    this.disablePieChart(this.props.dataFromParent);
     return (
       <Container>
         <Row className="justify-content-md-center">
           <Col>
             <Button variant= "info" className="m-3 shadow" size="lg"><AiOutlineLineChart size={50} onClick={() => this.hideComponent("showHideLineChart")} /></Button>
             <Button variant= "info" className="m-3 shadow" size="lg"><AiOutlineBarChart size={50} onClick={() => this.hideComponent("showHideColumnChart")} /></Button>
-            <Button variant= "info" className="m-3 shadow" size="lg"><AiOutlinePieChart size={50} onClick={() => this.hideComponent("showHidePieChart")} /></Button>
+            <Button variant= "info" id="pieButton" className="m-3 shadow" size="lg"><AiOutlinePieChart size={50} onClick={() => this.hideComponent("showHidePieChart")} /></Button>
           </Col>
         </Row>
         <Row>

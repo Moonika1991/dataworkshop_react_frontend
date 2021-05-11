@@ -48,7 +48,6 @@ export default class Query extends React.Component {
         .then(res => {
           this.setState({ result : JSON.stringify(res.data) });
           document.getElementById("result").style.display = "block";
-          console.log(res);
           console.log(res.data);
         })
     } else {
@@ -77,10 +76,10 @@ export default class Query extends React.Component {
               <Button variant="primary" type="submit">Search</Button>
           </Form>
           <div id="result" className="mt-5 mb-4">
-            <div id="result-box" className="p-3 mb-2 shadow">Result is: { this.state.result }</div>
+            <div id="result-box" className="p-3 mb-2 shadow">Result is: {this.state.result}</div>
             <Button variant="primary" className="float-right" onClick={this.hideShowResult}>Hide/Show Result</Button>
             <br />
-            <ChartsButtons dataFromParent = { this.state.result } />
+            <ChartsButtons dataFromParent = {this.state.result} />
           </div>
         </Col>
       </Row>
