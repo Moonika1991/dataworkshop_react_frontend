@@ -56,7 +56,7 @@ export default class ChartsButtons extends React.Component {
       <Container>
         <Row className="justify-content-md-center">
           <Col>
-            <Button variant= "info" className="m-3 shadow" size="lg"><AiOutlineLineChart size={50} onClick={() => this.hideComponent("showHideLineChart")} /></Button>
+            <Button variant= "info" id="lineButton" className="m-3 shadow" size="lg"><AiOutlineLineChart size={50} onClick={() => this.hideComponent("showHideLineChart")} /></Button>
             <Button variant= "info" className="m-3 shadow" size="lg"><AiOutlineBarChart size={50} onClick={() => this.hideComponent("showHideColumnChart")} /></Button>
             <Button variant= "info" id="pieButton" className="m-3 shadow" size="lg"><AiOutlinePieChart size={50} onClick={() => this.hideComponent("showHidePieChart")} /></Button>
           </Col>
