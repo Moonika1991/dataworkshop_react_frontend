@@ -1,40 +1,50 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
+import moment from 'moment';
 
 export default class Vis3d extends React.Component {
   constructor() {
     super();
-    this.generateDataPoints = this.generateDataPoints.bind(this);
+    this.generateOptions = this.generateOptions.bind(this);
+    this.generateVals = this.generateVals.bind(this);
   }
 
-  generateDataPoints(data){
-    d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows){
-      function unpack(rows, key) {
-        return rows.map(function(row) { return row[key]; });
-      }
+  generateOptions(inData) {
+    var data = [];
+    const dictList = JSON.parse(inData);
+    const xVals = [];
+    let yVals = [];
+    const zVals = [];
+    for (const [key, value] of Object.entries(dictList)) {
+      const dataPts = this.generateVals(value);
+      xVals.push(dataPts[0]);
+      yVals = dataPts[1];
+      zVals.push(dataPts[2]);
+    }
+    console.log(zVals);
+    data.push({ type: 'surface', x: yVals, y: xVals, z: zVals, autosize: false,  width: 700, height: 700})
+    return data;
+  }
 
-      var z_data = []
-      for (i=0;i<24;i++){
-        z_data.push(unpack(rows,i));
-      }
-    })
-    return z_data;
+  generateVals(inData) {
+    const xKey = Object.keys(inData)[0];
+    const xVal = inData[xKey];
+    delete inData[xKey];
+    const yVals = [];
+    const zVals = [];
+    for (const [key, value] of Object.entries(inData)) {
+      yVals.push(key);
+      zVals.push(value);
+    }
+    return [xVal, yVals, zVals];
   }
 
   render() {
-  const data = this.generateDataPoints(this.props.dataToDisplay);
-  const options = {
-    title: 'Mt Bruno Elevation',
-    data: [{
-      type: 'surface',
-      z: data
-    }]
-  };
-
-  return (
-    <div className="m-3">
-      <Plot data = {options} />
-    </div>
+    const options = this.generateOptions(this.props.dataToDisplay);
+    return (
+      <div className="m-3">
+        <Plot data = {options} />
+      </div>
     )
   }
 }

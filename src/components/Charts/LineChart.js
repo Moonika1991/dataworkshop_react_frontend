@@ -38,7 +38,9 @@ export default class LineChart extends React.Component {
       var xVal;
       for (const [key, value] of Object.entries(dict)){
           if (moment(key).isValid()){
+            console.log(typeof key);
             xVal = new Date(key);
+            //xVal = xVal.toLocaleDateString();
           } else {
             xVal = key;
           }
