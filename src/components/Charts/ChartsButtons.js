@@ -86,7 +86,6 @@ export default class ChartsButtons extends React.Component {
     link.download = "Result.csv";
     link.href = url;
     link.click();
-    console.log('check');
   }
 
   render() {
