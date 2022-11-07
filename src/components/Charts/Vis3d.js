@@ -21,7 +21,6 @@ export default class Vis3d extends React.Component {
       yVals = dataPts[1];
       zVals.push(dataPts[2]);
     }
-    console.log(zVals);
     data.push({ type: 'surface', x: yVals, y: xVals, z: zVals, autosize: false,  width: 700, height: 700})
     return data;
   }
